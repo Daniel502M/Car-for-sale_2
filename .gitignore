@@ -1,0 +1,4 @@
+.venv
+.idea
+__pycache__
+__pycache__/cars.cpython-312.pyc
