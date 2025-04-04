@@ -12,6 +12,7 @@ class User(Base):
     password = Column(String, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("now()"))
 
+
 class Cars(Base):
     __tablename__ = "cars"
 
@@ -32,6 +33,7 @@ class Cars(Base):
     description = Column(String, nullable=False)
     user_id = Column(Integer, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("now()"))
+
 
 # class BayedCourses(Base):
 #     __tablename__ = "bayed_courses"

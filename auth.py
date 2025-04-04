@@ -1,5 +1,6 @@
 import datetime
 
+from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, status, Depends
 from fastapi.exceptions import HTTPException
 
@@ -18,7 +19,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 180
 
 
 def create_token(user_data: dict):
-    token_exp = datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    token_exp = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {
         "exp": token_exp,
         "user": user_data
@@ -59,7 +60,6 @@ def get_current_user(token: str = Depends(oauth2_schema)):
                                    f"ERR: {err}")
 
 
-
 auth_router = APIRouter(tags=['Auth'])
 
 
@@ -74,7 +74,7 @@ def sign_up(user_create_data: UserSignUpSchema):
     try:
         dbconn.cursor.execute("""INSERT INTO users
                                 (name, email, password) VALUES (%s, %s, %s)""",
-                            (user_create_data.name, user_create_data.email, hashed_password))
+                              (user_create_data.name, user_create_data.email, hashed_password))
         dbconn.conn.commit()
     except Exception as err:
         raise err
@@ -94,7 +94,7 @@ def login(login_data: UserLoginSchema):
     try:
         dbconn.cursor.execute("""SELECT * FROM users
                                 WHERE email=%s""",
-                            (email,))
+                              (email,))
     except Exception as err:
         raise err
 
@@ -118,7 +118,7 @@ def login(login_data: UserLoginSchema):
         )
 
     payload = {
-        "user_id": user.get(id),
+        "user_id": user.get(f"{id}"),
         "email": user.get(email)
     }
 

@@ -4,6 +4,7 @@ from users_schemas import UserSchema, UserUpdateSchema
 from auth_schemas import UserSignUpSchema
 from pydantic import EmailStr
 from security import hash_password
+
 import auth
 
 
@@ -61,18 +62,19 @@ user_router1 = APIRouter(tags=['User Update'])
 
 # @_UPDATE
 
+
 @user_router1.put("/update/user-by-id/{user_id}")
-def update_user_by_id(user_create_data: UserUpdateSchema, user_id: int,
-                      current_user = Depends(auth.get_current_user)):
+def update_user_by_id(user_update_data: UserUpdateSchema, user_id: int,
+                      current_user=Depends(auth.get_current_user)):
     dbconn = DbConn()
     try:
-        hashed_password = hash_password(user_create_data.password)
+        hashed_password = hash_password(user_update_data.password)
     except Exception as err:
         raise err
 
     try:
         dbconn.cursor.execute("""UPDATE users SET name=%s, password=%s WHERE id=%s""",
-                              (user_create_data.name, hashed_password, user_id))
+                              (user_update_data.name, hashed_password, user_id))
 
         dbconn.conn.commit()
     except Exception as err:
@@ -123,14 +125,22 @@ user_router2 = APIRouter(tags=['User Delete'])
 
 # @_DELETE
 
+
 @user_router2.delete("/users/delete/by-user-id/{user_id}")
-def delete_user_by_id(user_id: int,
-                      current_user = Depends(auth.get_current_user)):
+def delete_user_by_id(user_id: int, user_create_data: UserSignUpSchema,
+                      current_user=Depends(auth.get_current_user)):
     dbconn = DbConn()
+    try:
+        hashed_password = hash_password(user_create_data.password)
+    except Exception as err:
+        raise err
 
-    dbconn.cursor.execute("""DELETE FROM users WHERE id=%s""",
-                          (user_id,))
+    try:
+        dbconn.cursor.execute("""DELETE FROM users WHERE id=%s""",
+                              (user_id,))
 
-    dbconn.conn.commit()
+        dbconn.conn.commit()
+    except Exception as err:
+        raise err
 
     return "User deleted"
