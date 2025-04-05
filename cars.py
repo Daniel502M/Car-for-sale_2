@@ -41,6 +41,17 @@ def add_cars(data: CarsCreateSchema,
 cars_router1 = APIRouter(tags=['Cars Get'])
 
 
+@cars_router1.get("/cars/all")
+def get_all_cars():
+    dbconn = DbConn()
+
+    dbconn.cursor.execute("""SELECT * FROM cars""")
+
+    cars = dbconn.cursor.fetchall()
+
+    return cars
+
+
 @cars_router1.get("/cars/by-id/{id}")
 def get_cars_by_id(id: int,
                    current_user=Depends(auth.get_current_user)):
