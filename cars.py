@@ -21,6 +21,8 @@ cars_router = APIRouter(tags=['Cars Create'])
 def add_cars(data: CarsCreateSchema,
              current_user=Depends(auth.get_current_user)):
 
+    user_id = current_user.get("user_id")  # Извлекаем user_id из словаря
+
     dbconn = DbConn()
 
     dbconn.cursor.execute("""INSERT INTO cars (tipe, brand, model, year, mileage, color,
@@ -28,7 +30,7 @@ def add_cars(data: CarsCreateSchema,
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                           (data.tipe, data.brand, data.model, data.year, data.mileage, data.color,
                            data.price, data.engine, data.engine_capacity, data.gearbox, data.drive,
-                           data.steering_wheel, data.region, data.description, data.user_id, current_user))
+                           data.steering_wheel, data.region, data.description, user_id))
 
     dbconn.conn.commit()
 

@@ -19,7 +19,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 180
 
 
 def create_token(user_data: dict):
-    token_exp = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    token_exp = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {
         "exp": token_exp,
         "user": user_data
@@ -118,8 +118,8 @@ def login(login_data: UserLoginSchema):
         )
 
     payload = {
-        "user_id": user.get(f"{id}"),
-        "email": user.get(email)
+        "user_id": user.get("id"),
+        "email": user.get("email")
     }
 
     token = create_token(payload)
