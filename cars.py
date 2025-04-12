@@ -12,7 +12,7 @@ from typing import Optional
 from auth import verify_token
 import auth
 
-cars_router = APIRouter(tags=['Cars Create'])
+cars_router = APIRouter(tags=['Cars CRUD'])
 
 
 # @_CREATE:
@@ -26,11 +26,11 @@ def add_cars(data: CarsCreateSchema,
     dbconn = DbConn()
 
     dbconn.cursor.execute("""INSERT INTO cars (tipe, brand, model, year, mileage, color,
-        price, engine, engine_capacity, gearbox, drive, steering_wheel, region, description, user_id)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+        price, engine, engine_capacity, gearbox, drive, steering_wheel, region, description, phone_number, user_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                           (data.tipe, data.brand, data.model, data.year, data.mileage, data.color,
                            data.price, data.engine, data.engine_capacity, data.gearbox, data.drive,
-                           data.steering_wheel, data.region, data.description, user_id))
+                           data.steering_wheel, data.region, data.description, data.phone_number, user_id))
 
     dbconn.conn.commit()
 
@@ -41,7 +41,7 @@ def add_cars(data: CarsCreateSchema,
 cars_router1 = APIRouter(tags=['Cars Get'])
 
 
-@cars_router1.get("/cars/all")
+@cars_router.get("/cars/all")
 def get_all_cars():
     dbconn = DbConn()
 
@@ -248,10 +248,10 @@ def get_cars_by_user_id(user_id,
 
 
 # @_UPDATE:
-cars_router2 = APIRouter(tags=['Cars Update'])
+# cars_router2 = APIRouter(tags=['Cars Update'])
 
 
-@cars_router2.put("/cars/update/by-id/{id}")
+@cars_router.put("/cars/update/by-id/{id}")
 def update_cars_by_id(data: CarsCreateSchema, id,
                       current_user=Depends(auth.get_current_user)):
     dbconn = DbConn()
@@ -269,10 +269,10 @@ def update_cars_by_id(data: CarsCreateSchema, id,
 
 
 # DELETE:
-cars_router3 = APIRouter(tags=['Cars Delete'])
+# cars_router3 = APIRouter(tags=['Cars Delete'])
 
 
-@cars_router3.delete("/cars/delete/by-id/{id}")
+@cars_router.delete("/cars/delete/by-id/{id}")
 def delete_cars_by_id(id,
                       current_user=Depends(auth.get_current_user)):
     dbconn = DbConn()
@@ -283,3 +283,8 @@ def delete_cars_by_id(id,
     dbconn.conn.commit()
 
     return "OK"
+
+
+# TODO: 1 - 10 photo;
+# TODO: private_message;
+# TODO: add to favorites.

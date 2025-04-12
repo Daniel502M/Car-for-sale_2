@@ -10,3 +10,7 @@ class UserSchema(BaseModel):
 class UserUpdateSchema(BaseModel):
     name: str
     password: str
+
+
+class UserFavoriteCars(BaseModel):
+    post_id: int

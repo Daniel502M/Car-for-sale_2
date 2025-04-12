@@ -16,4 +16,4 @@ class CarsCreateSchema(BaseModel):
     steering_wheel: str
     region: str
     description: str
-    user_id: int
+    phone_number: str

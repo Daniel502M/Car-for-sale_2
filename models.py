@@ -31,6 +31,7 @@ class Cars(Base):
     steering_wheel = Column(String, nullable=False)
     region = Column(String, nullable=False)
     description = Column(String, nullable=False)
+    phone_number = Column(String, nullable=False)
     user_id = Column(Integer, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("now()"))
 
@@ -45,3 +46,11 @@ class Cars(Base):
 #     # duration = Column(Integer, nullable=False)
 #     # price = Column(Float, nullable=False)
 #     created_at = Column(TIMESTAMP, nullable=False, server_default=text("now()"))
+
+
+class Favorite(Base):
+    __tablename__ = "favorite_cars"
+
+    id = Column(Integer, nullable=False, primary_key=True)
+    user_id = Column(Integer, nullable=False)
+    post_id = Column(Integer, nullable=False)

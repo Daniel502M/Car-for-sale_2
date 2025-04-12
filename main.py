@@ -7,8 +7,8 @@ import time
 from models import Base
 from database import engine
 from auth import auth_router
-from cars import cars_router, cars_router1, cars_router2, cars_router3
-from users import user_router, user_router1, user_router2
+from cars import cars_router, cars_router1
+from users import user_router, user_router1, user_favorites
 
 # from download_photo import upload_router
 
@@ -44,12 +44,12 @@ app.include_router(auth_router)
 # cars
 app.include_router(cars_router)
 app.include_router(cars_router1)
-app.include_router(cars_router2)
-app.include_router(cars_router3)
+# app.include_router(cars_router2)
+# app.include_router(cars_router3)
 # user
 app.include_router(user_router)
 app.include_router(user_router1)
-app.include_router(user_router2)
+app.include_router(user_favorites)
 
 # app.include_router(upload_router)
 
