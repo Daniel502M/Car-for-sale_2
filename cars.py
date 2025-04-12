@@ -7,17 +7,16 @@ from dbconn import DbConn
 from auth_schemas import UserSignUpSchema, UserLoginSchema
 from security import hash_password, verify_password
 from cars_schemas import CarsCreateSchema
-# from buy_courses_schemas import BuyCoursesSchemas
 from typing import Optional
 from auth import verify_token
 import auth
 
-cars_router = APIRouter(tags=['Cars CRUD'])
-
 
 # @_CREATE:
+cars_crud_router = APIRouter(tags=['Cars CRUD'])
 
-@cars_router.post("/create/cars")
+
+@cars_crud_router.post("/create/cars")
 def add_cars(data: CarsCreateSchema,
              current_user=Depends(auth.get_current_user)):
 
@@ -25,10 +24,10 @@ def add_cars(data: CarsCreateSchema,
 
     dbconn = DbConn()
 
-    dbconn.cursor.execute("""INSERT INTO cars (tipe, brand, model, year, mileage, color,
+    dbconn.cursor.execute("""INSERT INTO cars (type, brand, model, year, mileage, color,
         price, engine, engine_capacity, gearbox, drive, steering_wheel, region, description, phone_number, user_id)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                          (data.tipe, data.brand, data.model, data.year, data.mileage, data.color,
+                          (data.type, data.brand, data.model, data.year, data.mileage, data.color,
                            data.price, data.engine, data.engine_capacity, data.gearbox, data.drive,
                            data.steering_wheel, data.region, data.description, data.phone_number, user_id))
 
@@ -38,10 +37,10 @@ def add_cars(data: CarsCreateSchema,
 
 
 # @_GET:
-cars_router1 = APIRouter(tags=['Cars Get'])
+cars_get_router = APIRouter(tags=['Cars Get'])
 
 
-@cars_router.get("/cars/all")
+@cars_crud_router.get("/cars/all")
 def get_all_cars():
     dbconn = DbConn()
 
@@ -52,9 +51,8 @@ def get_all_cars():
     return cars
 
 
-@cars_router1.get("/cars/by-id/{id}")
-def get_cars_by_id(id: int,
-                   current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-id/{id}")
+def get_cars_by_id(id: int):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE id=%s""",
@@ -65,12 +63,11 @@ def get_cars_by_id(id: int,
     return cars
 
 
-@cars_router1.get("/cars/by-type/{type}")
-def get_cars_by_type(type,
-                     current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-type/{type}")
+def get_cars_by_type(type: str):
     dbconn = DbConn()
 
-    dbconn.cursor.execute("""SELECT * FROM cars WHERE tipe=%s""",
+    dbconn.cursor.execute("""SELECT * FROM cars WHERE type=%s""",
                           (type,))
 
     cars = dbconn.cursor.fetchall()
@@ -78,9 +75,8 @@ def get_cars_by_type(type,
     return cars
 
 
-@cars_router1.get("/cars/by-brand/{brand}")
-def get_cars_by_brand(brand,
-                      current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-brand/{brand}")
+def get_cars_by_brand(brand: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE brand=%s""",
@@ -91,9 +87,8 @@ def get_cars_by_brand(brand,
     return cars
 
 
-@cars_router1.get("/cars/by-model/{model}")
-def get_cars_by_model(model,
-                      current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-model/{model}")
+def get_cars_by_model(model: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE model=%s""",
@@ -104,9 +99,8 @@ def get_cars_by_model(model,
     return cars
 
 
-@cars_router1.get("/cars/by-year/{year}")
-def get_cars_by_year(year,
-                     current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-year/{year}")
+def get_cars_by_year(year: int):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE year=%s""",
@@ -117,9 +111,8 @@ def get_cars_by_year(year,
     return cars
 
 
-@cars_router1.get("/cars/by-mileage/{mileage}")
-def get_cars_by_mileage(mileage,
-                        current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-mileage/{mileage}")
+def get_cars_by_mileage(mileage: int):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE mileage=%s""",
@@ -130,9 +123,8 @@ def get_cars_by_mileage(mileage,
     return cars
 
 
-@cars_router1.get("/cars/by-color/{color}")
-def get_cars_by_color(color,
-                      current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-color/{color}")
+def get_cars_by_color(color: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE color=%s""",
@@ -143,9 +135,8 @@ def get_cars_by_color(color,
     return cars
 
 
-@cars_router1.get("/cars/by-price/{start_price}-{end_price}")
-def get_cars_by_price(start_price, end_price,
-                      current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-price/{start_price}-{end_price}")
+def get_cars_by_price(start_price, end_price):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE price>=%s and price<=%s""",
@@ -156,9 +147,8 @@ def get_cars_by_price(start_price, end_price,
     return cars
 
 
-@cars_router1.get("/cars/by-engine/{engine}")
-def get_cars_by_engine(engine,
-                       current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-engine/{engine}")
+def get_cars_by_engine(engine: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE engine=%s""",
@@ -169,9 +159,8 @@ def get_cars_by_engine(engine,
     return cars
 
 
-@cars_router1.get("/cars/by_engine_capacity/{engine_capacity}")
-def get_cars_by_engine_capacity(engine_capacity,
-                                current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by_engine_capacity/{engine_capacity}")
+def get_cars_by_engine_capacity(engine_capacity: float):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE engine_capacity=%s""",
@@ -182,9 +171,8 @@ def get_cars_by_engine_capacity(engine_capacity,
     return cars
 
 
-@cars_router1.get("/cars/by-gearbox/{gearbox}")
-def get_cars_by_gearbox(gearbox,
-                        current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-gearbox/{gearbox}")
+def get_cars_by_gearbox(gearbox: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE gearbox=%s""",
@@ -195,9 +183,8 @@ def get_cars_by_gearbox(gearbox,
     return cars
 
 
-@cars_router1.get("/cars/by-drive/{drive}")
-def get_cars_by_drive(drive,
-                      current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by-drive/{drive}")
+def get_cars_by_drive(drive: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE drive=%s""",
@@ -208,9 +195,8 @@ def get_cars_by_drive(drive,
     return cars
 
 
-@cars_router1.get("/cars/by_steering_wheel/{steering_wheel}")
-def get_cars_by_steering_wheel(steering_wheel,
-                               current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by_steering_wheel/{steering_wheel}")
+def get_cars_by_steering_wheel(steering_wheel: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE steering_wheel=%s""",
@@ -221,9 +207,8 @@ def get_cars_by_steering_wheel(steering_wheel,
     return cars
 
 
-@cars_router1.get("/cars/by_region/{region}")
-def get_cars_by_region(region,
-                       current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by_region/{region}")
+def get_cars_by_region(region: str):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE region=%s""",
@@ -234,9 +219,8 @@ def get_cars_by_region(region,
     return cars
 
 
-@cars_router1.get("/cars/by_user_id/{user_id}")
-def get_cars_by_user_id(user_id,
-                        current_user=Depends(auth.get_current_user)):
+@cars_get_router.get("/cars/by_user_id/{user_id}")
+def get_cars_by_user_id(user_id: int):
     dbconn = DbConn()
 
     dbconn.cursor.execute("""SELECT * FROM cars WHERE user_id=%s""",
@@ -248,12 +232,12 @@ def get_cars_by_user_id(user_id,
 
 
 # @_UPDATE:
-# cars_router2 = APIRouter(tags=['Cars Update'])
-
-
-@cars_router.put("/cars/update/by-id/{id}")
+@cars_crud_router.put("/cars/update/by-id/{id}")
 def update_cars_by_id(data: CarsCreateSchema, id,
                       current_user=Depends(auth.get_current_user)):
+
+    user_id = current_user.get("user_id")  # Извлекаем user_id из словаря
+
     dbconn = DbConn()
 
     dbconn.cursor.execute("""UPDATE cars SET tipe=%s, brand=%s, model=%s, year=%s, mileage=%s, color=%s,
@@ -261,7 +245,7 @@ def update_cars_by_id(data: CarsCreateSchema, id,
                         region=%s,description=%s WHERE user_id=%s""",
                           (data.tipe, data.brand, data.model, data.year, data.mileage, data.color,
                            data.price, data.engine, data.engine_capacity, data.gearbox, data.drive,
-                           data.steering_wheel, data.region, data.description, data.user_id, id))
+                           data.steering_wheel, data.region, data.description, user_id, id))
 
     dbconn.conn.commit()
 
@@ -269,16 +253,16 @@ def update_cars_by_id(data: CarsCreateSchema, id,
 
 
 # DELETE:
-# cars_router3 = APIRouter(tags=['Cars Delete'])
-
-
-@cars_router.delete("/cars/delete/by-id/{id}")
-def delete_cars_by_id(id,
+@cars_crud_router.delete("/cars/delete/by-id/{id}")
+def delete_cars_by_id(id: int,
                       current_user=Depends(auth.get_current_user)):
+
+    user_id = current_user.get("user_id")  # Извлекаем user_id из словаря
+
     dbconn = DbConn()
 
     dbconn.cursor.execute("""DELETE FROM cars WHERE id=%s""",
-                          (id,))
+                          (id, user_id))
 
     dbconn.conn.commit()
 
@@ -286,5 +270,4 @@ def delete_cars_by_id(id,
 
 
 # TODO: 1 - 10 photo;
-# TODO: private_message;
-# TODO: add to favorites.
+# TODO: private_message.

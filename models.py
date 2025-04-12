@@ -17,7 +17,7 @@ class Cars(Base):
     __tablename__ = "cars"
 
     id = Column(Integer, nullable=False, primary_key=True)
-    tipe = Column(String, nullable=False)
+    type = Column(String, nullable=False)
     brand = Column(String, nullable=False)
     model = Column(String, nullable=False)
     year = Column(Integer, nullable=False)
@@ -54,3 +54,13 @@ class Favorite(Base):
     id = Column(Integer, nullable=False, primary_key=True)
     user_id = Column(Integer, nullable=False)
     post_id = Column(Integer, nullable=False)
+
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, nullable=False, primary_key=True)
+    user_id = Column(Integer, nullable=False)
+    post_id = Column(Integer, nullable=False)
+    message = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False, server_default=text("now()"))

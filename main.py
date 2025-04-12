@@ -7,8 +7,10 @@ import time
 from models import Base
 from database import engine
 from auth import auth_router
-from cars import cars_router, cars_router1
-from users import user_router, user_router1, user_favorites
+from cars import cars_crud_router, cars_get_router
+from users import user_crud_router, user_get_router
+from favorites import user_favorites_router
+from messages import message_crud_router
 
 # from download_photo import upload_router
 
@@ -42,16 +44,15 @@ def main():
 # auth
 app.include_router(auth_router)
 # cars
-app.include_router(cars_router)
-app.include_router(cars_router1)
-# app.include_router(cars_router2)
-# app.include_router(cars_router3)
-# user
-app.include_router(user_router)
-app.include_router(user_router1)
-app.include_router(user_favorites)
-
-# app.include_router(upload_router)
+app.include_router(cars_crud_router)
+app.include_router(cars_get_router)
+# users
+app.include_router(user_crud_router)
+app.include_router(user_get_router)
+# favorites
+app.include_router(user_favorites_router)
+# messages
+app.include_router(message_crud_router)
 
 
 if __name__ == "__main__":

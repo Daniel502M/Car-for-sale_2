@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class CarsCreateSchema(BaseModel):
-    tipe: str
+    type: str
     brand: str
     model: str
     year: int
