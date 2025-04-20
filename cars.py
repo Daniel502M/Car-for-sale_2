@@ -40,7 +40,7 @@ def add_cars(data: CarsCreateSchema,
 cars_get_router = APIRouter(tags=['Cars Get'])
 
 
-@cars_crud_router.get("/cars/all")
+@cars_crud_router.get("/api/cars/all")
 def get_all_cars():
     dbconn = DbConn()
 
