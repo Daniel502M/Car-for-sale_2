@@ -270,4 +270,3 @@ def delete_cars_by_id(id: int,
 
 
 # TODO: 1 - 10 photo;
-# TODO: private_message.
