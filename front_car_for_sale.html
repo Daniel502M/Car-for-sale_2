@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Car for sale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .hidden { display: none; }
+    .btn { margin: 5px; }
+    .card { border: 1px solid #ccc; padding: 10px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h1>DmCars</h1>
+
+  <!-- Регистрация / Вход -->
+  <div id="auth">
+    <h2>Вход / Регистрация</h2>
+    <input id="email" placeholder="Email" />
+    <input id="password" placeholder="Пароль" type="password" />
+    <button onclick="register()">Зарегистрироваться</button>
+    <button onclick="login()">Войти</button>
+  </div>
+
+  <!-- Главная страница -->
+  <div id="main" class="hidden">
+    <h2>Объявления</h2>
+    <button onclick="fetchAds()">Обновить список</button>
+    <div id="ads"></div>
+
+    <h3>Создать объявление</h3>
+    <input id="title" placeholder="Заголовок" />
+    <input id="description" placeholder="Описание" />
+    <button onclick="createAd()">Создать</button>
+
+    <h3>Избранное</h3>
+    <div id="favorites"></div>
+
+    <button onclick="logout()">Выйти</button>
+  </div>
+
+  <script>
+    const apiUrl = 'https://your-domain.com/api'; // замените на ваш адрес
+    let token = '';
+
+    function register() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      fetch(`${apiUrl}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => res.json())
+      .then(data => alert("Регистрация завершена!"))
+      .catch(err => console.error(err));
+    }
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        token = data.access_token;
+        document.getElementById("auth").classList.add("hidden");
+        document.getElementById("main").classList.remove("hidden");
+        fetchAds();
+        fetchFavorites();
+      })
+      .catch(err => console.error(err));
+    }
+
+    function logout() {
+      token = '';
+      document.getElementById("main").classList.add("hidden");
+      document.getElementById("auth").classList.remove("hidden");
+    }
+
+    function fetchAds() {
+      fetch(`${apiUrl}/ads`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("ads");
+          container.innerHTML = '';
+          data.forEach(ad => {
+            const div = document.createElement("div");
+            div.className = "card";
+            div.innerHTML = `
+              <b>${ad.title}</b><br>
+              ${ad.description}<br>
+              <button onclick="addToFavorites(${ad.id})">Добавить в избранное</button>
+              <button onclick="messageSeller(${ad.id})">Написать продавцу</button>
+            `;
+            container.appendChild(div);
+          });
+        });
+    }
+
+    function createAd() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+
+      fetch(`${apiUrl}/ads`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title, description })
+      })
+      .then(() => fetchAds());
+    }
+
+    function addToFavorites(adId) {
+      fetch(`${apiUrl}/favorites`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ad_id: adId })
+      })
+      .then(() => fetchFavorites());
+    }
+
+    function fetchFavorites() {
+      fetch(`${apiUrl}/favorites`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("favorites");
+        container.innerHTML = '';
+        data.forEach(fav => {
+          const div = document.createElement("div");
+          div.className = "card";
+          div.innerHTML = `
+            <b>${fav.title}</b><br>
+            <button onclick="removeFromFavorites(${fav.id})">Удалить из избранного</button>
+          `;
+          container.appendChild(div);
+        });
+      });
+    }
+
+    function removeFromFavorites(adId) {
+      fetch(`${apiUrl}/favorites/${adId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(() => fetchFavorites());
+    }
+
+    function messageSeller(adId) {
+      const msg = prompt("Введите сообщение продавцу:");
+      if (!msg) return;
+
+      fetch(`${apiUrl}/messages`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ad_id: adId, message: msg })
+      })
+      .then(() => alert("Сообщение отправлено!"));
+    }
+  </script>
+</body>
+</html>

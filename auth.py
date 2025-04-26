@@ -63,7 +63,7 @@ def get_current_user(token: str = Depends(oauth2_schema)):
 auth_router = APIRouter(tags=['Auth'])
 
 
-@auth_router.post("/sign-up")
+@auth_router.post("/api/sign-up")
 def sign_up(user_create_data: UserSignUpSchema):
     dbconn = DbConn()
     try:
@@ -82,7 +82,7 @@ def sign_up(user_create_data: UserSignUpSchema):
     return "OK"
 
 
-@auth_router.post("/login")
+@auth_router.post("/api/login")
 def login(login_data: UserLoginSchema):
     dbconn = DbConn()
     try:

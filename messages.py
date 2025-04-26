@@ -17,7 +17,7 @@ import auth
 message_crud_router = APIRouter(tags=['Messages CRUD'])
 
 
-@message_crud_router.post("/massage/create")
+@message_crud_router.post("/api/massage/create")
 def create_message(data: MessageSchema,
                    current_user=Depends(auth.get_current_user)):
 
@@ -33,7 +33,7 @@ def create_message(data: MessageSchema,
     return "Message delivered successfully"
 
 
-@message_crud_router.get("/message/get/all")
+@message_crud_router.get("/api/message/get/all")
 def get_all_messages():
 
     dbconn = DbConn()
@@ -45,7 +45,7 @@ def get_all_messages():
     return messages
 
 
-@message_crud_router.put("/message/update/{id}")
+@message_crud_router.put("/api/message/update/{id}")
 def update_message_by_id(id: int, data: MessageUpdateSchema,
                          current_user=Depends(auth.get_current_user)):
 
@@ -61,7 +61,7 @@ def update_message_by_id(id: int, data: MessageUpdateSchema,
     return "Message updated successfully"
 
 
-@message_crud_router.delete("/message/delete/{id}")
+@message_crud_router.delete("/api/message/delete/{id}")
 def delete_message_by_id(id: int,
                          current_user=Depends(auth.get_current_user)):
 

@@ -8,7 +8,7 @@ import auth
 user_favorites_router = APIRouter(tags=['Favorite Cars CRUD'])
 
 
-@user_favorites_router.post("/user/favorite/cars")
+@user_favorites_router.post("/api/user/favorite/cars")
 def create_favorite_car(data: UserFavoriteCars,
                         current_user=Depends(auth.get_current_user)):
 
@@ -24,7 +24,7 @@ def create_favorite_car(data: UserFavoriteCars,
     return "OK"
 
 
-@user_favorites_router.get("/user/favorite/cars/all")
+@user_favorites_router.get("/api/user/favorite/cars/all")
 def get_all_cars():
     dbconn = DbConn()
 
@@ -35,7 +35,7 @@ def get_all_cars():
     return cars
 
 
-@user_favorites_router.delete("/user/favorite/delete/{post_id}")
+@user_favorites_router.delete("/api/user/favorite/delete/{post_id}")
 def delete_favorite_car_by_id(post_id: int,
                               current_user=Depends(auth.get_current_user)):
 

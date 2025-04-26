@@ -13,7 +13,7 @@ user_crud_router = APIRouter(tags=['User CRUD'])
 
 # @_GET
 
-@user_crud_router.get("/users/get/all")
+@user_crud_router.get("/api/users/get/all")
 def get_all_users():
     dbconn = DbConn()
 
@@ -27,7 +27,7 @@ def get_all_users():
 user_get_router = APIRouter(tags=['User Get'])
 
 
-@user_get_router.get("/user/get/by_id/{user_id}")
+@user_get_router.get("/api/user/get/by_id/{user_id}")
 def get_user_by_id(user_id: int):
     dbconn = DbConn()
 
@@ -38,7 +38,7 @@ def get_user_by_id(user_id: int):
     return user
 
 
-@user_get_router.get("/user/get/by_name/{user_name}")
+@user_get_router.get("/api/user/get/by_name/{user_name}")
 def get_users_by_name(user_name: str):
     dbconn = DbConn()
 
@@ -50,7 +50,7 @@ def get_users_by_name(user_name: str):
     return user
 
 
-@user_get_router.get("/user/get/by_email/{user_email}")
+@user_get_router.get("/api/user/get/by_email/{user_email}")
 def get_user_by_email(user_email: EmailStr):
     dbconn = DbConn()
 
@@ -64,7 +64,7 @@ def get_user_by_email(user_email: EmailStr):
 
 # @_UPDATE
 
-@user_crud_router.put("/update/user-by-id/{user_id}")
+@user_crud_router.put("/api/update/user-by-id/{user_id}")
 def update_user_by_id(user_update_data: UserUpdateSchema, user_id: int,
                       current_user=Depends(auth.get_current_user)):
 
@@ -89,7 +89,7 @@ def update_user_by_id(user_update_data: UserUpdateSchema, user_id: int,
 
 # @_DELETE
 
-@user_crud_router.delete("/users/delete/by-user-id/{user_id}")
+@user_crud_router.delete("/api/users/delete/by-user-id/{user_id}")
 def delete_user_by_id(user_id: int, user_create_data: UserSignUpSchema,
                       current_user=Depends(auth.get_current_user)):
 

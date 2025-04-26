@@ -16,7 +16,7 @@ import auth
 cars_crud_router = APIRouter(tags=['Cars CRUD'])
 
 
-@cars_crud_router.post("/create/cars")
+@cars_crud_router.post("/api/create/cars")
 def add_cars(data: CarsCreateSchema,
              current_user=Depends(auth.get_current_user)):
 
@@ -51,7 +51,7 @@ def get_all_cars():
     return cars
 
 
-@cars_get_router.get("/cars/by-id/{id}")
+@cars_get_router.get("/api/cars/by-id/{id}")
 def get_cars_by_id(id: int):
     dbconn = DbConn()
 
@@ -63,7 +63,7 @@ def get_cars_by_id(id: int):
     return cars
 
 
-@cars_get_router.get("/cars/by-type/{type}")
+@cars_get_router.get("/api/cars/by-type/{type}")
 def get_cars_by_type(type: str):
     dbconn = DbConn()
 
@@ -75,7 +75,7 @@ def get_cars_by_type(type: str):
     return cars
 
 
-@cars_get_router.get("/cars/by-brand/{brand}")
+@cars_get_router.get("/api/cars/by-brand/{brand}")
 def get_cars_by_brand(brand: str):
     dbconn = DbConn()
 
@@ -87,7 +87,7 @@ def get_cars_by_brand(brand: str):
     return cars
 
 
-@cars_get_router.get("/cars/by-model/{model}")
+@cars_get_router.get("/api/cars/by-model/{model}")
 def get_cars_by_model(model: str):
     dbconn = DbConn()
 
@@ -99,7 +99,7 @@ def get_cars_by_model(model: str):
     return cars
 
 
-@cars_get_router.get("/cars/by-year/{year}")
+@cars_get_router.get("/api/cars/by-year/{year}")
 def get_cars_by_year(year: int):
     dbconn = DbConn()
 
@@ -111,7 +111,7 @@ def get_cars_by_year(year: int):
     return cars
 
 
-@cars_get_router.get("/cars/by-mileage/{mileage}")
+@cars_get_router.get("/api/cars/by-mileage/{mileage}")
 def get_cars_by_mileage(mileage: int):
     dbconn = DbConn()
 
@@ -123,7 +123,7 @@ def get_cars_by_mileage(mileage: int):
     return cars
 
 
-@cars_get_router.get("/cars/by-color/{color}")
+@cars_get_router.get("/api/cars/by-color/{color}")
 def get_cars_by_color(color: str):
     dbconn = DbConn()
 
@@ -135,7 +135,7 @@ def get_cars_by_color(color: str):
     return cars
 
 
-@cars_get_router.get("/cars/by-price/{start_price}-{end_price}")
+@cars_get_router.get("/api/cars/by-price/{start_price}-{end_price}")
 def get_cars_by_price(start_price, end_price):
     dbconn = DbConn()
 
@@ -147,7 +147,7 @@ def get_cars_by_price(start_price, end_price):
     return cars
 
 
-@cars_get_router.get("/cars/by-engine/{engine}")
+@cars_get_router.get("/api/cars/by-engine/{engine}")
 def get_cars_by_engine(engine: str):
     dbconn = DbConn()
 
@@ -159,7 +159,7 @@ def get_cars_by_engine(engine: str):
     return cars
 
 
-@cars_get_router.get("/cars/by_engine_capacity/{engine_capacity}")
+@cars_get_router.get("/api/cars/by_engine_capacity/{engine_capacity}")
 def get_cars_by_engine_capacity(engine_capacity: float):
     dbconn = DbConn()
 
@@ -171,7 +171,7 @@ def get_cars_by_engine_capacity(engine_capacity: float):
     return cars
 
 
-@cars_get_router.get("/cars/by-gearbox/{gearbox}")
+@cars_get_router.get("/api/cars/by-gearbox/{gearbox}")
 def get_cars_by_gearbox(gearbox: str):
     dbconn = DbConn()
 
@@ -183,7 +183,7 @@ def get_cars_by_gearbox(gearbox: str):
     return cars
 
 
-@cars_get_router.get("/cars/by-drive/{drive}")
+@cars_get_router.get("/api/cars/by-drive/{drive}")
 def get_cars_by_drive(drive: str):
     dbconn = DbConn()
 
@@ -195,7 +195,7 @@ def get_cars_by_drive(drive: str):
     return cars
 
 
-@cars_get_router.get("/cars/by_steering_wheel/{steering_wheel}")
+@cars_get_router.get("/api/cars/by_steering_wheel/{steering_wheel}")
 def get_cars_by_steering_wheel(steering_wheel: str):
     dbconn = DbConn()
 
@@ -207,7 +207,7 @@ def get_cars_by_steering_wheel(steering_wheel: str):
     return cars
 
 
-@cars_get_router.get("/cars/by_region/{region}")
+@cars_get_router.get("/api/cars/by_region/{region}")
 def get_cars_by_region(region: str):
     dbconn = DbConn()
 
@@ -219,7 +219,7 @@ def get_cars_by_region(region: str):
     return cars
 
 
-@cars_get_router.get("/cars/by_user_id/{user_id}")
+@cars_get_router.get("/api/cars/by_user_id/{user_id}")
 def get_cars_by_user_id(user_id: int):
     dbconn = DbConn()
 
@@ -232,7 +232,7 @@ def get_cars_by_user_id(user_id: int):
 
 
 # @_UPDATE:
-@cars_crud_router.put("/cars/update/by-id/{id}")
+@cars_crud_router.put("/api/cars/update/by-id/{id}")
 def update_cars_by_id(data: CarsCreateSchema, id,
                       current_user=Depends(auth.get_current_user)):
 
@@ -253,7 +253,7 @@ def update_cars_by_id(data: CarsCreateSchema, id,
 
 
 # DELETE:
-@cars_crud_router.delete("/cars/delete/by-id/{id}")
+@cars_crud_router.delete("/api/cars/delete/by-id/{id}")
 def delete_cars_by_id(id: int,
                       current_user=Depends(auth.get_current_user)):
 
